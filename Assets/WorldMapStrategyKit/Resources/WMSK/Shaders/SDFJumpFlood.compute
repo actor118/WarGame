@@ -1,0 +1,33 @@
+#pragma kernel CSMain
+
+RWTexture2D<float> ResultTexture;
+int resolution;
+int stepSize;
+
+[numthreads(8, 8, 1)]
+void CSMain(uint3 id : SV_DispatchThreadID) {
+    int x = id.x;
+    int y = id.y;
+
+    if (x >= resolution || y >= resolution) return;
+
+    float minDistance = ResultTexture[int2(x, y)];
+    if (minDistance <= 0) return;
+
+    float radix = (float)stepSize / (resolution * sqrt(2));
+    for (int dy = -1; dy <= 1; dy++) {
+        for (int dx = -1; dx <= 1; dx++) {
+            int nx = x + dx * stepSize;
+            int ny = y + dy * stepSize;
+
+            if (nx >= 0 && ny >= 0 && nx < resolution && ny < resolution) {
+                float distance = ResultTexture[int2(nx, ny)] + sqrt(dx * dx + dy * dy) * radix;
+                if (distance < minDistance) {
+                    minDistance = distance;
+                }
+            }
+        }
+    }
+
+    ResultTexture[int2(x, y)] = minDistance;
+}
