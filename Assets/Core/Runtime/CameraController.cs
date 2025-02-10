@@ -99,6 +99,8 @@ public class CameraController : MonoBehaviour
         UpdateCameraPosition();
         UpdateBasePosition();
     }
+
+    //更新水平面坐标信息
     private void UpdateVelocity()
     {
         horizontalVelocity = (transform.position - lastPosition) / Time.deltaTime;
@@ -106,6 +108,8 @@ public class CameraController : MonoBehaviour
         lastPosition = transform.position;
 
     }
+
+    //获取键盘事件，移动
     private void GetKeyboardMovement()
     {
         Vector3 inputValue = movement.ReadValue<Vector2>().x * GetCameraRight() + movement.ReadValue<Vector2>().y * GetCameraForward();
@@ -117,12 +121,16 @@ public class CameraController : MonoBehaviour
             targetPositions = inputValue;
         }
     }
+
+    //获取当前相机的右侧方向
     private Vector3 GetCameraRight()
     {
         Vector3 right = cameraTransfrom.right;
         right.y = 0;
         return right;
     }
+
+    //获取当前相机的正面方向
     private Vector3 GetCameraForward()
     {
         Vector3 forward = cameraTransfrom.forward;
@@ -130,6 +138,7 @@ public class CameraController : MonoBehaviour
         return forward;
     }
 
+    //通过update移动相机基本点
     private void UpdateBasePosition()
     {
         if (targetPositions.sqrMagnitude > 0.1f)
@@ -144,6 +153,8 @@ public class CameraController : MonoBehaviour
         }
         targetPositions = Vector3.zero;
     }
+
+    //旋转相机的坐标信息
     private void RotateCamera(InputAction.CallbackContext inputValue)
     {
         if (!Mouse.current.middleButton.isPressed)
@@ -152,6 +163,8 @@ public class CameraController : MonoBehaviour
         float value = inputValue.ReadValue<Vector2>().x;
         transform.rotation = Quaternion.Euler(0f, value * maxRotationSpeed + transform.rotation.eulerAngles.y, 0f);
     }
+
+    //设置放大时，相机的纵向移动位置。
     private void ZoomCamera(InputAction.CallbackContext inputValue)
     {
         float value = -inputValue.ReadValue<Vector2>().y / zoomCorrection;
@@ -172,6 +185,8 @@ public class CameraController : MonoBehaviour
             }
         }
     }
+
+    //更新相机的相对位置
     private void UpdateCameraPosition()
     {
         Vector3 zoomTarget = new Vector3(cameraTransfrom.localPosition.x, zoomHeight, cameraTransfrom.localPosition.z);
@@ -181,6 +196,7 @@ public class CameraController : MonoBehaviour
         cameraTransfrom.LookAt(transform);
     }
 
+    //鼠标在屏幕边缘的事件，并移动
     private void CheckMouseAtScreenEdge()
     {
         Vector2 mousePosition = Mouse.current.position.ReadValue();
@@ -208,6 +224,7 @@ public class CameraController : MonoBehaviour
 
     }
 
+    //鼠标抓取移动相机位置
     private void DragCamera()
     {
         if(!Mouse.current.rightButton.isPressed)
