@@ -7,3 +7,6 @@
 Assembly-CSharp-Editor.csproj
 Assembly-CSharp.csproj
 WarGame.sln
+/.vs
+/Packages
+/Packages
