@@ -10,3 +10,5 @@ WarGame.sln
 /.vs
 /Packages
 /Packages
+/Packages
+Packages/packages-lock.json
